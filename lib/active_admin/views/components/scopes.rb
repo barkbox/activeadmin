@@ -22,9 +22,12 @@ module ActiveAdmin
 
       def build(scopes, options = {})
         scopes.group_by(&:group).each do |group, group_scopes|
-          ul class: "table_tools_segmented_control #{group_class(group)}" do
-            group_scopes.each do |scope|
-              build_scope(scope, options) if call_method_or_exec_proc(scope.display_if_block)
+          valid_scopes = group_scopes.select{|s| call_method_or_exec_proc(s.display_if_block) }
+          if valid_scopes.any?
+            ul class: "table_tools_segmented_control #{group_class(group)}" do
+              valid_scopes.each do |scope|
+                build_scope(scope, options)
+              end
             end
           end
         end
