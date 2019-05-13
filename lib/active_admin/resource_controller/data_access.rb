@@ -130,7 +130,7 @@ module ActiveAdmin
       def build_new_resource
         scoped_collection.send(
           method_for_build,
-          *resource_params.map { |params| params.slice(active_admin_config.resource_class.inheritance_column) }
+          *resource_params.first.slice(active_admin_config.resource_class.inheritance_column)
         )
       end
 
@@ -286,7 +286,7 @@ module ActiveAdmin
       #
       def assign_attributes(resource, attributes)
         if resource.respond_to?(:assign_attributes)
-          resource.assign_attributes(*attributes)
+          resource.assign_attributes(attributes[0])
         else
           resource.attributes = attributes[0]
         end
